@@ -1,4 +1,4 @@
-package de.desertfox.analyse.whatsapp.core.export;
+package de.desertfox.analyse.whatsapp.core.analyser;
 
 import de.desertfox.analyse.whatsapp.model.ChartData;
 

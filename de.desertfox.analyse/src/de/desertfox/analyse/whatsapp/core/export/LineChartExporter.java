@@ -33,6 +33,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
+import de.desertfox.analyse.whatsapp.core.analyser.IChartAnalyser;
 import de.desertfox.analyse.whatsapp.model.ChartData;
 
 /**

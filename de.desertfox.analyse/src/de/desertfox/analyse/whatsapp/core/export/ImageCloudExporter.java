@@ -10,6 +10,7 @@ import java.util.List;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
+import de.desertfox.analyse.whatsapp.core.analyser.IAnalyser;
 import wordcloud.CollisionMode;
 import wordcloud.WordCloud;
 import wordcloud.WordFrequency;

@@ -1,4 +1,4 @@
-package de.desertfox.analyse.whatsapp.core;
+package de.desertfox.analyse.whatsapp.core.analyser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,6 @@ import wordcloud.WordFrequency;
 import wordcloud.nlp.FrequencyAnalyzer;
 import wordcloud.nlp.normalize.CharacterStrippingNormalizer;
 import wordcloud.nlp.normalize.UpperCaseNormalizer;
-import de.desertfox.analyse.whatsapp.core.export.IAnalyser;
 import de.desertfox.analyse.whatsapp.model.Message;
 
 public class WordCloudAnalyser implements IAnalyser {

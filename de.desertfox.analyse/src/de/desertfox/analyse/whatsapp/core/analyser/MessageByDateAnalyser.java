@@ -1,4 +1,4 @@
-package de.desertfox.analyse.whatsapp.core;
+package de.desertfox.analyse.whatsapp.core.analyser;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.desertfox.analyse.whatsapp.core.export.IChartAnalyser;
 import de.desertfox.analyse.whatsapp.model.ChartData;
 import de.desertfox.analyse.whatsapp.model.Message;
 

@@ -1,5 +1,7 @@
 package de.desertfox.analyse.whatsapp.core.export;
 
+import de.desertfox.analyse.whatsapp.core.analyser.IAnalyser;
+
 public abstract class BaseExporter implements IExporter {
 
     protected IAnalyser analyser;

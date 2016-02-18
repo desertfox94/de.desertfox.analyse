@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.desertfox.analyse.whatsapp.core.export;
+package de.desertfox.analyse.whatsapp.core.analyser;
 
 /**
  * @author desertfox94

@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import de.desertfox.analyse.whatsapp.core.analyser.MessageByDateAnalyser;
+import de.desertfox.analyse.whatsapp.core.analyser.WordCloudAnalyser;
 import de.desertfox.analyse.whatsapp.core.export.ExportRunner;
 import de.desertfox.analyse.whatsapp.core.export.ImageCloudExporter;
 import de.desertfox.analyse.whatsapp.core.export.LineChartExporter;
