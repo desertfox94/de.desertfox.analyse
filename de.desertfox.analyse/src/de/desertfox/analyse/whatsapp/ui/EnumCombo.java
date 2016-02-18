@@ -3,22 +3,22 @@ package de.desertfox.analyse.whatsapp.ui;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
-import de.desertfox.analyse.whatsapp.model.AnalyseMethod;
+import de.desertfox.analyse.whatsapp.model.IComboViewableEnum;
 
-public class AnalyseMethodCombo extends Combo {
+public class EnumCombo extends Combo {
 
-	private AnalyseMethod[] methods;
+	private IComboViewableEnum[] enums;
 
-	public AnalyseMethodCombo(Composite parent, int style) {
+	public EnumCombo(Composite parent, int style, IComboViewableEnum[] enums) {
 		super(parent, style);
+		this.enums = enums;
 		fill();
 	}
 
 	private void fill() {
-		methods = AnalyseMethod.values();
-		String[] items = new String[methods.length];
+		String[] items = new String[enums.length];
 		for (int i = 0; i < items.length; i++) {
-			items[i] = methods[i].getDisplayName();
+			items[i] = enums[i].getDisplayName();
 		}
 		setItems(items);
 	}
@@ -26,12 +26,12 @@ public class AnalyseMethodCombo extends Combo {
 	@Override
 	public String getText() {
 		int selectionIndex = getSelectionIndex();
-		return methods[selectionIndex].getDisplayName();
+		return enums[selectionIndex].getDisplayName();
 	}
 
-	public AnalyseMethod getSelectedItem() {
+	public IComboViewableEnum getSelectedItem() {
 		int selectionIndex = getSelectionIndex();
-		return methods[selectionIndex];
+		return enums[selectionIndex];
 	}
 
 	@Override

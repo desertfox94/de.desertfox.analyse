@@ -1,15 +1,13 @@
-package de.desertfox.analyse.whatsapp.core;
+package de.desertfox.analyse.whatsapp.ui;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import de.desertfox.analyse.whatsapp.core.MessageCounter;
+import de.desertfox.analyse.whatsapp.core.MessageParser;
 import de.desertfox.analyse.whatsapp.core.analyser.MessageByDateAnalyser;
 import de.desertfox.analyse.whatsapp.core.analyser.WordCloudAnalyser;
 import de.desertfox.analyse.whatsapp.core.export.ExportRunner;
@@ -18,18 +16,22 @@ import de.desertfox.analyse.whatsapp.core.export.LineChartExporter;
 import de.desertfox.analyse.whatsapp.core.export.TimeSpreadAnalyser;
 import de.desertfox.analyse.whatsapp.core.export.WordCloudExporter;
 import de.desertfox.analyse.whatsapp.model.AnalyseMethod;
-import de.desertfox.analyse.whatsapp.model.ChartData;
+import de.desertfox.analyse.whatsapp.model.ImageTemplate;
 import de.desertfox.analyse.whatsapp.model.Message;
-import de.desertfox.analyse.whatsapp.model.TimeSpreadChart;
 
-public class Analyser {
+public class WhatsappAnalyserController {
 
-    private File           sourceFile;
-    private File           targetDir;
-    private List<Message>  messages;
-    private MessageCounter counter      = new MessageCounter();
-    private MessageParser  parser       = new MessageParser();
-    private ExportRunner   exportRunner = new ExportRunner();
+    private File                      sourceFile;
+    private File                      targetDir;
+    private List<Message>             messages;
+    private MessageCounter            counter      = new MessageCounter();
+    private MessageParser             parser       = new MessageParser();
+    private ExportRunner              exportRunner = new ExportRunner();
+    private WhatsappAnalyserAppWindow view;
+
+    public WhatsappAnalyserController(WhatsappAnalyserAppWindow view) {
+        this.view = view;
+    }
 
     private boolean performCheckSource(String source) {
         if (source == null || (source = source.trim()).isEmpty()) {
@@ -54,7 +56,7 @@ public class Analyser {
         switch (method) {
             case MEDIA_COUNT:
                 int mediaCount = counter.countMedia(ensureMessages());
-                System.out.println("Der Verlauf enthält " + mediaCount+ " Bilder");
+                System.out.println("Der Verlauf enthält " + mediaCount + " Bilder");
                 return true;
             case ANALYSE_BY_TIME:
                 TimeSpreadAnalyser spreadAnalyser = new TimeSpreadAnalyser();
@@ -67,7 +69,8 @@ public class Analyser {
                 countAll();
                 return true;
             case IMAGES_CLOUD:
-                ImageCloudExporter imageExporter = new ImageCloudExporter(new WordCloudAnalyser(ensureMessages()));
+                ImageTemplate imageTemplate = view.getImageTemplate();
+                ImageCloudExporter imageExporter = new ImageCloudExporter(new WordCloudAnalyser(ensureMessages()), imageTemplate);
                 exportRunner.runExport(imageExporter, targetDir);
                 return true;
             case MESSAGE_BY_DATE:
@@ -97,6 +100,10 @@ public class Analyser {
             return true;
         }
         return false;
+    }
+    
+    public String[] getImageCloudTemplates() {
+        return new String[1];
     }
 
     private void printPlacholderLine() {

@@ -9,19 +9,26 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Display;
 
-import de.desertfox.analyse.whatsapp.core.analyser.IAnalyser;
 import wordcloud.CollisionMode;
 import wordcloud.WordCloud;
 import wordcloud.WordFrequency;
 import wordcloud.bg.PixelBoundryBackground;
 import wordcloud.font.scale.LinearFontScalar;
 import wordcloud.palette.ColorPalette;
+import de.desertfox.analyse.whatsapp.core.analyser.IAnalyser;
+import de.desertfox.analyse.whatsapp.model.ImageTemplate;
 
 public class ImageCloudExporter extends BaseExporter {
 
-    public ImageCloudExporter(IAnalyser analyser) {
+    private ImageTemplate template;
+    
+    public ImageCloudExporter(IAnalyser analyser, ImageTemplate template) {
         super(analyser);
+        this.template = template;
     }
 
     @SuppressWarnings("unchecked")
@@ -30,13 +37,16 @@ public class ImageCloudExporter extends BaseExporter {
         finished = false;
         try {
             final List<WordFrequency> wordFrequencies = (List<WordFrequency>) analyser.getResult();
-            final WordCloud wordCloud = new WordCloud(1181, 715, CollisionMode.PIXEL_PERFECT);
+            InputStream inputStream = getInputStream(template.getPath());
+            Image image = new Image(Display.getCurrent(), inputStream);
+            Rectangle bounds = image.getBounds();
+            final WordCloud wordCloud = new WordCloud(bounds.width, bounds.height, CollisionMode.PIXEL_PERFECT);
             wordCloud.setPadding(2);
-            wordCloud.setBackground(new PixelBoundryBackground(getInputStream("C:\\Users\\d.donges\\Desktop\\cat1.png")));
+            wordCloud.setBackground(new PixelBoundryBackground(getInputStream(template.getPath())));
             wordCloud.setColorPalette(new ColorPalette(new Color(0x4055F1), new Color(0x408DF1), new Color(0x40AAF1), new Color(0x40C5F1), new Color(0x40D3F1), new Color(0xFFFFFF)));
             wordCloud.setFontScalar(new LinearFontScalar(10, 40));
             wordCloud.build(wordFrequencies);
-            wordCloud.writeToFile("C:\\Users\\d.donges\\Desktop\\cat_out1.png");
+            wordCloud.writeToFile(targetDir.getPath() + "\\" + template.getDisplayName() + System.currentTimeMillis() + ".png");
             System.out.println("fin");
             return Status.OK_STATUS;
         } catch (Exception e) {

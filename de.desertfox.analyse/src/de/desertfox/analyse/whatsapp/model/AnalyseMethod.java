@@ -1,6 +1,6 @@
 package de.desertfox.analyse.whatsapp.model;
 
-public enum AnalyseMethod {
+public enum AnalyseMethod implements IComboViewableEnum {
 
 	COUNT_BY_SENDER("Nachrichten pro Person"),
 	ANALYSE_BY_TIME("Zeitliche Verteilung"),
@@ -16,8 +16,14 @@ public enum AnalyseMethod {
 		this.displayName = displayName;
 	}
 
+	@Override
 	public String getDisplayName() {
 		return displayName;
 	}
+
+    @Override
+    public String getId() {
+        return null;
+    }
 
 }
