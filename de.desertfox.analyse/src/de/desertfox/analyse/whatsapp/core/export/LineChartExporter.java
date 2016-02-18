@@ -41,106 +41,102 @@ import de.desertfox.analyse.whatsapp.model.ChartData;
  */
 public class LineChartExporter extends BaseExporter {
 
-	private static final int CHART_MIN_WIDTH = 5;
-	private static final int CHART_MAX_WIDTH = 20;
+    private static final int CHART_MIN_WIDTH = 5;
+    private static final int CHART_MAX_WIDTH = 20;
 
-	private ChartData chartData;
-	private ChartAnalyser chartAnalyser;
+    private ChartData        chartData;
 
-	public LineChartExporter(ChartData chartData) {
-		this.chartData = chartData;
-	}
+    public LineChartExporter(ChartData chartData) {
+        super(null);
+        this.chartData = chartData;
+    }
 
-	public LineChartExporter(ChartAnalyser chartAnalyser) {
-		this.chartAnalyser = chartAnalyser;
-	}
+    public LineChartExporter(IChartAnalyser chartAnalyser) {
+        super(chartAnalyser);
+    }
 
-	private int calcChartWidth(int rowCount) {
-		int width = (int) (rowCount * 0.7);
-		if (width < CHART_MIN_WIDTH) {
-			return CHART_MIN_WIDTH;
-		} else if (width > CHART_MAX_WIDTH) {
-			return CHART_MAX_WIDTH;
-		}
-		return width;
-	}
+    private int calcChartWidth(int rowCount) {
+        int width = (int) (rowCount * 0.7);
+        if (width < CHART_MIN_WIDTH) {
+            return CHART_MIN_WIDTH;
+        } else if (width > CHART_MAX_WIDTH) {
+            return CHART_MAX_WIDTH;
+        }
+        return width;
+    }
 
-	@Override
-	public IStatus export(File targetDir) {
-		finished = false;
-		try {
+    @SuppressWarnings("resource")
+    @Override
+    public IStatus export(File targetDir) {
+        finished = false;
+        try {
 
-			XSSFWorkbook wb = new XSSFWorkbook();
-			Sheet sheet = wb.createSheet("test");
+            XSSFWorkbook wb = new XSSFWorkbook();
+            Sheet sheet = wb.createSheet("test");
 
-			Cell cell;
-			Row row;
-			if (chartData == null) {
-				chartData = chartAnalyser.getResult();
-			}
-			String[] columnHeaders = chartData.getColumnHeaders();
-			final int NUM_OF_COLUMNS = columnHeaders.length;
-			row = sheet.createRow(0);
-			for (int columnIndex = 0; columnIndex < columnHeaders.length; columnIndex++) {
-				cell = row.createCell(columnIndex);
-				cell.setCellValue(columnHeaders[columnIndex]);
-			}
+            Cell cell;
+            Row row;
+            if (chartData == null) {
+                chartData = (ChartData) analyser.getResult();
+            }
+            String[] columnHeaders = chartData.getColumnHeaders();
+            row = sheet.createRow(0);
+            for (int columnIndex = 0; columnIndex < columnHeaders.length; columnIndex++) {
+                cell = row.createCell(columnIndex);
+                cell.setCellValue(columnHeaders[columnIndex]);
+            }
 
-			int rowCount = chartData.getRowCount();
-			for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
-				Object[] rowData = chartData.getRowData(rowIndex);
-				row = sheet.createRow(rowIndex + 1);
-				int columnIndex = 0;
-				for (Object object : rowData) {
-					cell = row.createCell(columnIndex++);
-					if (object instanceof String) {
-						cell.setCellValue((String) object);
-					} else if (object instanceof Integer) {
-						cell.setCellValue((Integer) object);
-					}
-				}
-			}
+            int rowCount = chartData.getRowCount();
+            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
+                Object[] rowData = chartData.getRowData(rowIndex);
+                row = sheet.createRow(rowIndex + 1);
+                int columnIndex = 0;
+                for (Object object : rowData) {
+                    cell = row.createCell(columnIndex++);
+                    if (object instanceof String) {
+                        cell.setCellValue((String) object);
+                    } else if (object instanceof Integer) {
+                        cell.setCellValue((Integer) object);
+                    }
+                }
+            }
 
-			Drawing drawing = sheet.createDrawingPatriarch();
-			ClientAnchor anchor = drawing.createAnchor(0, 0, 0, 0, columnHeaders.length + 1, 1,
-					calcChartWidth(rowCount), 15);
+            Drawing drawing = sheet.createDrawingPatriarch();
+            ClientAnchor anchor = drawing.createAnchor(0, 0, 0, 0, columnHeaders.length + 1, 1, calcChartWidth(rowCount), 15);
 
-			Chart chart = drawing.createChart(anchor);
-			ChartLegend legend = chart.getOrCreateLegend();
-			legend.setPosition(LegendPosition.TOP_RIGHT);
+            Chart chart = drawing.createChart(anchor);
+            ChartLegend legend = chart.getOrCreateLegend();
+            legend.setPosition(LegendPosition.TOP_RIGHT);
 
-			LineChartData data = chart.getChartDataFactory().createLineChartData();
+            LineChartData data = chart.getChartDataFactory().createLineChartData();
 
-			// Use a category axis for the bottom axis.
-			ChartAxis bottomAxis = chart.getChartAxisFactory().createCategoryAxis(AxisPosition.BOTTOM);
-			ValueAxis leftAxis = chart.getChartAxisFactory().createValueAxis(AxisPosition.LEFT);
-			leftAxis.setCrosses(AxisCrosses.AUTO_ZERO);
+            // Use a category axis for the bottom axis.
+            ChartAxis bottomAxis = chart.getChartAxisFactory().createCategoryAxis(AxisPosition.BOTTOM);
+            ValueAxis leftAxis = chart.getChartAxisFactory().createValueAxis(AxisPosition.LEFT);
+            leftAxis.setCrosses(AxisCrosses.AUTO_ZERO);
 
-			ChartDataSource<Number> xs = DataSources.fromNumericCellRange(sheet,
-					new CellRangeAddress(1, rowCount, 0, 0));
+            ChartDataSource<Number> xs = DataSources.fromNumericCellRange(sheet, new CellRangeAddress(1, rowCount, 0, 0));
 
-			ChartDataSource[] dataSources = new ChartDataSource[columnHeaders.length];
-			for (int i = 1; i < columnHeaders.length; i++) {
-				ChartDataSource<Number> dataSource = DataSources.fromNumericCellRange(sheet,
-						new CellRangeAddress(1, rowCount, i, i));
-				LineChartSeries serie = data.addSeries(xs, dataSource);
-				serie.setTitle(columnHeaders[i]);
-			}
-			chart.plot(data, bottomAxis, leftAxis);
+            for (int i = 1; i < columnHeaders.length; i++) {
+                ChartDataSource<Number> dataSource = DataSources.fromNumericCellRange(sheet, new CellRangeAddress(1, rowCount, i, i));
+                LineChartSeries serie = data.addSeries(xs, dataSource);
+                serie.setTitle(columnHeaders[i]);
+            }
+            chart.plot(data, bottomAxis, leftAxis);
 
-			// Write the output to a file
-			FileOutputStream fileOut;
-			fileOut = new FileOutputStream(targetDir.getPath() + "\\Graph-" + System.currentTimeMillis() + ".xlsx");
-			wb.write(fileOut);
-			fileOut.close();
-			return Status.OK_STATUS;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return Status.CANCEL_STATUS;
-		} finally {
-			finished = true;
-		}
+            // Write the output to a file
+            FileOutputStream fileOut;
+            fileOut = new FileOutputStream(targetDir.getPath() + "\\Graph-" + System.currentTimeMillis() + ".xlsx");
+            wb.write(fileOut);
+            fileOut.close();
+            return Status.OK_STATUS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Status.CANCEL_STATUS;
+        } finally {
+            finished = true;
+        }
 
-	}
+    }
 
 }

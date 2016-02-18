@@ -2,13 +2,11 @@ package de.desertfox.analyse.whatsapp.core.export;
 
 import java.awt.Color;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
-import de.desertfox.analyse.whatsapp.model.Message;
 import wordcloud.CollisionMode;
 import wordcloud.WordCloud;
 import wordcloud.WordFrequency;
@@ -21,36 +19,12 @@ import wordcloud.palette.ColorPalette;
 
 public class WordCloudExporter extends BaseExporter {
 	
-	private List<Message> messages;
-	
-	public WordCloudExporter(List<Message> messages) {
-		this.messages = messages;
-	}
-	
-	private List<String> convertToWordList(List<Message> messages) {
-		List<String> result = new ArrayList<>(messages.size() * 2);
-		String text;
-		String splitPattern = " ";
-		for (Message message : messages) {
-			text = message.getText();
-			if (text == null) {
-				continue;
-			}
-			String[] words = text.split(splitPattern);
-			for (String word : words) {
-				if (word == null || word.isEmpty()) {
-					continue;
-				}
-				if ("omitted".equalsIgnoreCase(word)) {
-					System.out.println();
-				}
-				result.add(word.toUpperCase());
-			}
-		}
-		return result;
-	}
+	public WordCloudExporter(IAnalyser analyser) {
+        super(analyser);
+    }
 
-	@Override
+    @SuppressWarnings("unchecked")
+    @Override
 	public IStatus export(File targetDir) {
 		finished = false;
 		try {
@@ -60,8 +34,7 @@ public class WordCloudExporter extends BaseExporter {
 			// frequencyAnalyzer.addNormalizer(new UpsideDownNormalizer());
 			frequencyAnalyzer.addNormalizer(new CharacterStrippingNormalizer());
 			frequencyAnalyzer.setMinWordLength(2);
-			List<String> words = convertToWordList(messages);
-			final List<WordFrequency> wordFrequencies = frequencyAnalyzer.load(words);
+			final List<WordFrequency> wordFrequencies = (List<WordFrequency>) analyser.getResult();
 			final WordCloud wordCloud = new WordCloud(600, 600, CollisionMode.PIXEL_PERFECT);
 			wordCloud.setPadding(2);
 			wordCloud.setBackground(new CircleBackground(300));
