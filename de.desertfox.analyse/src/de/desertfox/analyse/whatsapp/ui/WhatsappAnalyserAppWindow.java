@@ -139,16 +139,6 @@ public class WhatsappAnalyserAppWindow {
             }
         });
         new Label(shell, SWT.NONE);
-
-        // Label lblArtDerVisualisierung = new Label(shell, SWT.NONE);
-        // lblArtDerVisualisierung.setLayoutData(new GridData(SWT.RIGHT,
-        // SWT.CENTER, false, false, 1, 1));
-        // lblArtDerVisualisierung.setText("Art der Visualisierung");
-
-        // Combo combo = new Combo(shell, SWT.NONE);
-        // combo.setItems(new String[] {"Excel", "Text"});
-        // combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false,
-        // 1, 1));
         new Label(shell, SWT.NONE);
         new Label(shell, SWT.NONE);
         new Label(shell, SWT.NONE);
