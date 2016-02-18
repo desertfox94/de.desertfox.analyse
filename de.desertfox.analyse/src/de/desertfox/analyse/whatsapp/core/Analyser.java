@@ -52,6 +52,10 @@ public class Analyser {
             return false;
         }
         switch (method) {
+            case MEDIA_COUNT:
+                int mediaCount = counter.countMedia(ensureMessages());
+                System.out.println("Der Verlauf enthält " + mediaCount+ " Bilder");
+                return true;
             case ANALYSE_BY_TIME:
                 TimeSpreadAnalyser spreadAnalyser = new TimeSpreadAnalyser();
                 LineChartExporter lineChartExporter = new LineChartExporter(spreadAnalyser.analyse(ensureMessages()));

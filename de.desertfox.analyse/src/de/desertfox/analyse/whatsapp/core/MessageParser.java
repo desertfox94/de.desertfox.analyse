@@ -65,6 +65,7 @@ public class MessageParser {
 	private void setText(Message message, FilteredStringBuilder builder) {
 		String s = builder.toString();
 		if (s.trim().toLowerCase().contains("media omitted")) {
+		    message.setMedia(true);
 			// filter media
 			return;
 		}

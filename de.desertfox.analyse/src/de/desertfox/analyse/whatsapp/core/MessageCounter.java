@@ -20,4 +20,15 @@ public class MessageCounter {
         }
         return senderMessageCount;
     }
+    
+    public int countMedia(List<Message> messages) {
+        int mediaCount = 0;
+        for (Message message : messages) {
+            if (message.isMedia()) {
+                mediaCount++;
+            }
+        }
+        return mediaCount;
+    }
+    
 }

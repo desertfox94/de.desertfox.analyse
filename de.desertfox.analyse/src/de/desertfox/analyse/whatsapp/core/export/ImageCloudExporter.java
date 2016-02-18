@@ -30,13 +30,14 @@ public class ImageCloudExporter extends BaseExporter {
         finished = false;
         try {
             final List<WordFrequency> wordFrequencies = (List<WordFrequency>) analyser.getResult();
-            final WordCloud wordCloud = new WordCloud(500, 500, CollisionMode.PIXEL_PERFECT);
+            final WordCloud wordCloud = new WordCloud(1181, 715, CollisionMode.PIXEL_PERFECT);
             wordCloud.setPadding(2);
-            wordCloud.setBackground(new PixelBoundryBackground(getInputStream("C:\\Users\\d.donges\\Desktop\\cat.png")));
+            wordCloud.setBackground(new PixelBoundryBackground(getInputStream("C:\\Users\\d.donges\\Desktop\\cat1.png")));
             wordCloud.setColorPalette(new ColorPalette(new Color(0x4055F1), new Color(0x408DF1), new Color(0x40AAF1), new Color(0x40C5F1), new Color(0x40D3F1), new Color(0xFFFFFF)));
             wordCloud.setFontScalar(new LinearFontScalar(10, 40));
             wordCloud.build(wordFrequencies);
-            wordCloud.writeToFile("C:\\Users\\d.donges\\Desktop\\cat_out.png");
+            wordCloud.writeToFile("C:\\Users\\d.donges\\Desktop\\cat_out1.png");
+            System.out.println("fin");
             return Status.OK_STATUS;
         } catch (Exception e) {
             e.printStackTrace();
