@@ -131,7 +131,7 @@ public class WhatsappAnalyserAppWindow {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 AnalyseMethod selectedItem = (AnalyseMethod) methodCombo.getSelectedItem();
-                imageTemplateCombo.setVisible(selectedItem == AnalyseMethod.IMAGES_CLOUD);
+                imageTemplateCombo.setEnabled(selectedItem == AnalyseMethod.IMAGES_CLOUD);
             }
 
             @Override
@@ -174,13 +174,17 @@ public class WhatsappAnalyserAppWindow {
             }
         });
         analyseButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-        analyseButton.setText("Analysieren");
+        analyseButton.setText("Analysieren/Exportieren");
         new Label(shell, SWT.NONE);
-        new Label(shell, SWT.NONE);
+        
+        Label imageTemplateLabel = new Label(shell, SWT.NONE);
+        imageTemplateLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+        imageTemplateLabel.setText("Bild Vorlage");
 
         imageTemplateCombo = new EnumCombo(shell, SWT.NONE, ImageTemplate.values());
         imageTemplateCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-        imageTemplateCombo.setVisible(false);
+        imageTemplateCombo.setEnabled(false);
+        imageTemplateCombo.select(0);
     }
     
     public ImageTemplate getImageTemplate() {
